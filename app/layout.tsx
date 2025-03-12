@@ -3,8 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import {ButtonTheme} from "@/componets/button/ButtonTheme";
 import {NavbarRoute} from "@/componets/layout/NavbarRoute";
-import {FooterRoute} from "@/componets/layout/FooterRoute";
-
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -25,11 +23,13 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
+
+
     return (
         <html lang="en">
         <body className={geistSans.variable + " " + geistMono.variable}>
-        <ButtonTheme />
-        <NavbarRoute />
+        <ButtonTheme/>
+        <NavbarRoute/>
         {children}
         </body>
         </html>

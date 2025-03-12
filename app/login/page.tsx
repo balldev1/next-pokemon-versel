@@ -1,9 +1,9 @@
+import {AuthCard} from "@/componets/login/AuthCard";
+
 const LoginPage = () => {
     return (
-        <div className="h-[900rem] flex items-center justify-center">
-            <div className="bg-rose-500">
-                login ja
-            </div>
+        <div className="flex items-center justify-center">
+            <AuthCard/>
         </div>
     )
 }

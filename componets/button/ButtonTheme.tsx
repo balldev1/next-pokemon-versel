@@ -2,11 +2,12 @@
 import { useState, useEffect } from "react";
 
 export const ButtonTheme = () => {
+
     const [theme, setTheme] = useState<string | null>(null); // เริ่มต้นเป็น null เพื่อหลีกเลี่ยง hydration error
 
     useEffect(() => {
         // โหลดธีมเริ่มต้นจาก localStorage หรือใช้ค่า default
-        const savedTheme = localStorage.getItem("theme") || "abyss";
+        const savedTheme = localStorage.getItem("theme") || "garden";
         setTheme(savedTheme);
         document.documentElement.setAttribute("data-theme", savedTheme);
     }, []);
@@ -23,6 +24,7 @@ export const ButtonTheme = () => {
     if (!theme) return null; // ป้องกันการเรนเดอร์ก่อนที่ธีมจะถูกโหลด
 
     return (
+
         <div className="relative flex items-center justify-center ">
             <label className="toggle text-accent shadow-sm shadow-accent absolute  top-5  z-50">
                 <input type="checkbox" className="" onChange={toggleTheme} checked={theme === "garden"}/>
@@ -47,6 +49,5 @@ export const ButtonTheme = () => {
                 </svg>
             </label>
         </div>
-
     );
 };
