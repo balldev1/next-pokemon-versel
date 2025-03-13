@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import {ButtonTheme} from "@/componets/button/ButtonTheme";
-import {NavbarRoute} from "@/componets/layout/NavbarRoute";
+import { ButtonTheme } from "@/componets/button/ButtonTheme";
+import { NavbarRoute } from "@/componets/layout/NavbarRoute";
+import { SessionProvider } from "next-auth/react";  // นำเข้า SessionProvider
+import ClientLayout from "@/componets/ClientLayout";  // นำเข้า ClientLayout
+
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -20,17 +23,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
                                        children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
-
-
+                                   }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en">
         <body className={geistSans.variable + " " + geistMono.variable}>
-        <ButtonTheme/>
-        <NavbarRoute/>
-        {children}
+        {/* ห่อหุ้ม children ด้วย SessionProvider */}
+        <ClientLayout>
+            <ButtonTheme />
+            <NavbarRoute />
+            {children}
+        </ClientLayout>
         </body>
         </html>
     );

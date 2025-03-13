@@ -1,12 +1,15 @@
 'use client'
-import Image from "next/image";
-import {AllPokemon} from "@/componets/pokemon/AllPokemon";
+
+import { AllPokemon } from "@/componets/pokemon/AllPokemon";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
 
-  return (
-      <div className="p-5">
-          <AllPokemon/>
-      </div>
-  );
+    const { data: session, status } = useSession();
+    return (
+        <div className="p-5">
+            {session?.user?.email}
+            <AllPokemon />
+        </div>
+    );
 }

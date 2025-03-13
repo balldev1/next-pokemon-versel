@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb" // ใช้ PostgreSQL, MySQL, SQLite, หรือ MongoDB ขึ้นอยู่กับฐานข้อมูลที่ใช้
+  url      = env("MONGODB_URI")
+}
+
+model users {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String
+}
