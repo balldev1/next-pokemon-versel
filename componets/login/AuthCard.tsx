@@ -58,28 +58,26 @@ export const AuthCard = () => {
     };
 
     return (
-        <div className="hero min-h-screen" style={{ backgroundImage: "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)" }}>
+        <div className="hero min-h-screen" style={{ backgroundImage: "url(https://github.com/pmndrs/zustand/raw/main/docs/bear.jpg)" }}>
             <div className="hero-overlay"></div>
             <div className="hero-content text-neutral-content text-center">
                 <div className="max-w-md flex flex-col justify-center items-center w-96">
                     <h1 className="mb-5 text-5xl font-bold">{isLogin ? "Login" : "Register"}</h1>
                     <p className="mb-5">{isLogin ? "Login as ApiPokemon." : "Create an account to get started."}</p>
-                    <div className="card bg-base-100 shadow-lg shadow-accent w-full shrink-0 shadow-2xl">
+                    <div className="card bg-base-100 shadow-md shadow-accent shadow-lg shadow-accent w-full shrink-0 shadow-2xl">
                         <div className="card-body">
                             <fieldset className="fieldset">
                                 <label className="fieldset-label">Email</label>
                                 <input
                                     type="text"  // เปลี่ยนจาก email เป็น text เพราะเป็น email
-                                    className="input w-full placeholder:text-accent"
-                                    placeholder="Email"
+                                    className="input w-full placeholder:text-success text-success border-[2px] border-accent "
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <label className="fieldset-label">Password</label>
                                 <input
                                     type="password"
-                                    className="input w-full placeholder:text-accent"
-                                    placeholder="Password"
+                                    className="input w-full placeholder:text-success text-success border-[2px] border-accent "
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
