@@ -25,8 +25,8 @@ export const ButtonTheme = () => {
 
     return (
 
-        <div className="relative flex items-center justify-center ">
-            <label className="toggle text-accent shadow-sm shadow-accent absolute  top-5  z-50">
+        <div className="relative  flex items-center justify-center z-50">
+            <label className="toggle text-accent shadow-sm shadow-accent absolute  top-5  ">
                 <input type="checkbox" className="" onChange={toggleTheme} checked={theme === "garden"}/>
                 <svg aria-label="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor">

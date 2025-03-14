@@ -13,3 +13,11 @@ layout Page
 [//]: # (            </div>)
 
 [//]: # (   </div>)
+
+[//]: # (loading)
+<div className="h-[30rem] flex  flex-col gap-4 items-center justify-center shadow-sm shadow-accent rounded-md">
+                        <span className="loading loading-spinner text-warning h-20 w-20"></span>
+                        isLoading
+</div>
+
+hover:bg-accent/10

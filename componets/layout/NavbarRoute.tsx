@@ -17,7 +17,7 @@ export const NavbarRoute = () => {
     return (
         <>
             {pathname !== '/login' && (
-                <div className="navbar sticky top-0 bg-base-100 shadow-sm">
+                <div className="navbar sticky top-0 bg-base-100 shadow-sm z-40">
                     <div className="flex-1">
                         <Link href='/'
                               className="btn btn-ghost text-xl">API Pokemon</Link>

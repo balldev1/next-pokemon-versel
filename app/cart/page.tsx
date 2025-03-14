@@ -6,7 +6,7 @@ const CartPage = () => {
 
     if (status === "loading") {
         return <div className="min-h-screen flex items-center justify-center ">
-            <span className="loading loading-spinner text-warning h-20 w-20">asdasdasd</span>
+            <span className="loading loading-spinner text-warning h-20 w-20"></span>
         </div>
     }
 

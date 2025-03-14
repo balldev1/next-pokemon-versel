@@ -1,13 +1,48 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Image from "next/image"; 
+import Image from "next/image";
+import {Countdown} from "@/componets/pokemon/Countdown";
 
 const PokemonPage = () => {
 
     const { id } = useParams<{ id: string }>();
 
     const [pokemonData, setPokemonData] = useState(null);
+    // สร้าง state สำหรับเก็บค่าของ input
+    const [inputValue, setInputValue] = useState('');
+    const [count, setCount] = useState(0); // สถานะสำหรับค่า range
+
+    // ฟังก์ชันสำหรับปรับค่า value เมื่อคลิก
+    const handleClick = (newValue: number) => {
+        setCount(newValue);
+    };
+
+    // เลือกภาพตามค่าของ count
+    const getImage = () => {
+        switch (count) {
+            case 0:
+                return pokemonData.sprites.front_default;
+            case 20:
+                return pokemonData.sprites.back_default;
+            case 40:
+                return pokemonData.sprites.front_shiny;
+            case 60:
+                return pokemonData.sprites.back_shiny;
+            default:
+                return pokemonData.sprites.front_default;
+        }
+    };
+
+    // ฟังก์ชันที่ใช้ในการตรวจสอบและอัปเดตค่าใน input
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (value < 0) {
+            e.target.value = 0 as any; // ถ้าค่าติดลบให้ปรับเป็น 0
+        }
+        setInputValue(value); // อัปเดตค่าของ input
+    };
+
 
     useEffect(() => {
         // ตรวจสอบว่า 'name' ถูกกำหนดแล้ว
@@ -27,31 +62,68 @@ const PokemonPage = () => {
     }, [id]); // เมื่อ 'name' เปลี่ยนให้ดึงข้อมูลใหม่
 
     if (!pokemonData) {
-        return <div>Loading...</div>;
+        return <div
+            className="min-h-screen flex  flex-col gap-4 items-center justify-center  rounded-md">
+            <span className="loading loading-spinner text-warning h-20 w-20"></span>
+            Loading .. .
+        </div>
     }
 
+
     return (
-        <div className="p-5">
-            <div className="container mx-auto  p-5 rounded-md shadow-sm shadow-accent border-accent">
-                <div >
+        <div className="p-5 ">
+            <div className="container relative mx-auto  p-5 rounded-md shadow-sm shadow-accent border-accent">
+                <div className="absolute right-14">
+                    <Countdown/>
+                </div>
+                <div className="absolute left-14">
+                    <div className="w-full max-w-xs ">
+                        <input
+                            type="range"
+                            min={0}
+                            max={60}
+                            value={count} // ใช้ค่าจากสถานะ
+                            className="range range-accent"
+                            step="20"
+                            onChange={(e) => setCount(Number(e.target.value))} // แก้ไขค่าเมื่อเลื่อนแถบ
+                        />
+                        <div className="flex justify-between   mt-2 text-xs bg-rose-500">
+                            <span onClick={() => handleClick(20)}></span>
+                            <span onClick={() => handleClick(20)}></span>
+                            <span onClick={() => handleClick(20)}></span>
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <div className=" flex flex-col items-center my-5">
                         <h1 className="text-2xl font-bold">{pokemonData.name}</h1>
                         <Image
                             width={120}
                             height={120}
-                            src={pokemonData.sprites.front_default}
+                            src={getImage()} // ใช้ฟังก์ชันที่เลือกภาพ
                             alt={pokemonData.name}
                             loading="lazy"
-                            blurDataURL={pokemonData.image} // ใช้ image URL ของคุณเป็นข้อมูลเบลอ
+                            blurDataURL={pokemonData.image} // ใช้ image URL
                         />
                     </div>
                     <div className="grid grid-cols-3">
-                        <div className="card w-96 bg-base-100 shadow-sm shadow-accent">
-                            <div className="card-body">
-                                <span className="badge badge-xs badge-warning">Most Popular</span>
+                        <div className="card w-96 bg-base-100 shadow-sm shadow-accent hover:bg-accent/10">
+                            <div className="card-body flex">
+                                <span className="badge badge-xs badge-ghost ">Most Popular</span>
                                 <div className="flex justify-between">
                                     <h2 className="text-3xl font-bold">Small</h2>
-                                    <span className="text-xl">$29/mo</span>
+                                    <input
+                                        disabled
+                                        type="number"
+                                        placeholder="Count"
+                                        className="input input-sm input-accent shadow-sm shadow-accent w-24"
+                                        onInput={(e: any) => {
+                                            const value = e.target.value;
+                                            if (value < 0) {
+                                                e.target.value = 0;
+                                            }
+                                        }}
+                                    />
                                 </div>
                                 <ul className="mt-6 flex flex-col gap-2 text-xs">
                                     <li>
@@ -109,17 +181,31 @@ const PokemonPage = () => {
                                         <span className="line-through">Real-time collaboration tools</span>
                                     </li>
                                 </ul>
-                                <div className="mt-6">
-                                    <button className="btn btn-active btn-accent btn-block hover:opacity-90">Subscribe</button>
+                                <div className="mt-auot">
+                                    <button
+                                        disabled
+                                        className=" btn btn-active btn-accent btn-block hover:opacity-90">Subscribe
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div className="card w-96 bg-base-100 shadow-sm shadow-accent">
-                            <div className="card-body">
-                                <span className="badge badge-xs badge-warning">Most Popular</span>
+                        <div className="card w-96 bg-base-100 shadow-sm shadow-accent hover:bg-accent/10">
+                            <div className="card-body flex">
+                                <span className="badge badge-xs badge-ghost">Most Popular</span>
                                 <div className="flex justify-between">
                                     <h2 className="text-3xl font-bold">Medium</h2>
-                                    <span className="text-xl">$49/mo</span>
+                                    <input
+                                        disabled
+                                        type="number"
+                                        placeholder="Count"
+                                        className="input input-sm input-accent shadow-sm shadow-accent w-24"
+                                        onInput={(e: any) => {
+                                            const value = e.target.value;
+                                            if (value < 0) {
+                                                e.target.value = 0;
+                                            }
+                                        }}
+                                    />
                                 </div>
                                 <ul className="mt-6 flex flex-col gap-2 text-xs">
                                     <li>
@@ -177,19 +263,30 @@ const PokemonPage = () => {
                                         <span className="line-through">Real-time collaboration tools</span>
                                     </li>
                                 </ul>
-                                <div className="mt-6">
-                                    <button className="btn btn-active btn-accent btn-block hover:opacity-90">Subscribe</button>
+                                <div className="mt-auto">
+                                    <button
+                                        disabled
+                                        className="btn btn-active btn-accent btn-block hover:opacity-90"
+                                    >
+                                        Subscribe
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div className="card w-96 bg-base-100 shadow-sm shadow-accent">
-                            <div className="card-body">
+                        <div className="card  bg-base-100 shadow-sm shadow-accent hover:bg-accent/10">
+                            <div className="card-body flex ">
                                 <span className="badge badge-xs badge-warning">Most Popular</span>
                                 <div className="flex justify-between">
                                     <h2 className="text-3xl font-bold">Premium</h2>
-                                    <span className="text-xl">$59/mo</span>
+                                    <input
+                                        type="number"
+                                        placeholder="Count"
+                                        className="input input-sm w-24"
+                                        value={inputValue} // ให้ค่าของ input มาจาก state
+                                        onChange={handleInputChange} // ใช้ onChange เพื่ออัปเดตค่า
+                                    />
                                 </div>
-                                <ul className="mt-6 flex flex-col gap-2 text-xs">
+                                <ul className="mt-6 flex flex-col gap-2 text-xs  ">
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              className="size-4 me-2 inline-block text-success" fill="none"
@@ -245,13 +342,19 @@ const PokemonPage = () => {
                                         <span className="line-through">Real-time collaboration tools</span>
                                     </li>
                                 </ul>
-                                <div className="mt-6">
-                                    <button className="btn btn-active btn-accent btn-block hover:opacity-90">Subscribe</button>
+                                <div className="mt-auto">
+                                    <div className="mt-auto">
+                                        <button
+                                            disabled={!inputValue}
+                                            className="btn btn-active btn-accent btn-block hover:opacity-90"
+                                        >
+                                            Subscribe
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

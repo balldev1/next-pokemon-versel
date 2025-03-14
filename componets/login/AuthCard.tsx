@@ -19,6 +19,14 @@ export const AuthCard = () => {
     const [loading, setLoading] = useState(false); // สถานะ Loading
     const router = useRouter(); // ใช้สำหรับ Redirect
 
+
+    // ฟังก์ชันที่ใช้จับการกด Enter
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLFieldSetElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // ป้องกันการ submit ฟอร์มเมื่อกด Enter
+            handleSubmit(e); // เรียกใช้ handleSubmit เมื่อกด Enter
+        }
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -28,7 +36,7 @@ export const AuthCard = () => {
         try {
             loginSchema.parse({ email, password });
 
-            const nextAuthResponse = await signIn("credentials", {
+            const nextAuthResponse: any = await signIn("credentials", {
                 redirect: false,
                 email,
                 password,
@@ -66,7 +74,8 @@ export const AuthCard = () => {
                     <p className="mb-5">{isLogin ? "Login as ApiPokemon." : "Create an account to get started."}</p>
                     <div className="card bg-base-100 shadow-md shadow-accent shadow-lg shadow-accent w-full shrink-0 shadow-2xl">
                         <div className="card-body">
-                            <fieldset className="fieldset">
+                            <fieldset onKeyDown={handleKeyPress}
+                                className="fieldset">
                                 <label className="fieldset-label">Email</label>
                                 <input
                                     type="text"  // เปลี่ยนจาก email เป็น text เพราะเป็น email
