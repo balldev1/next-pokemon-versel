@@ -3,23 +3,36 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from "next/image";
 import {Countdown} from "@/componets/pokemon/Countdown";
+import {useCartStore} from "@/stores/useStore";
 
 const PokemonPage = () => {
 
     const { id } = useParams<{ id: string }>();
-
     const [pokemonData, setPokemonData] = useState(null);
     // สร้าง state สำหรับเก็บค่าของ input
     const [inputValue, setInputValue] = useState('');
     const [count, setCount] = useState(0); // สถานะสำหรับค่า range
 
+    // add pokemon
+    // ใช้ store เพื่อดึงค่า items และฟังก์ชันต่าง ๆ
+    const { items, addItem, removeItem, clearCart } = useCartStore();
+
+    // ฟังก์ชันที่ใช้ในการตรวจสอบและอัปเดตค่าใน input
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (value < 0) {
+            e.target.value = 0 as any; // ถ้าค่าติดลบให้ปรับเป็น 0
+        }
+        setInputValue(value);
+    };
+
     // ฟังก์ชันสำหรับปรับค่า value เมื่อคลิก
-    const handleClick = (newValue: number) => {
+    const handleSwitchImage = (newValue: number) => {
         setCount(newValue);
     };
 
     // เลือกภาพตามค่าของ count
-    const getImage = () => {
+    const switchImage = () => {
         switch (count) {
             case 0:
                 return pokemonData.sprites.front_default;
@@ -34,15 +47,13 @@ const PokemonPage = () => {
         }
     };
 
-    // ฟังก์ชันที่ใช้ในการตรวจสอบและอัปเดตค่าใน input
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        if (value < 0) {
-            e.target.value = 0 as any; // ถ้าค่าติดลบให้ปรับเป็น 0
+    // ฟังก์ชันเพิ่มข้อมูลลงในตะกร้า
+    const handleAddCart = () => {
+        if (id && inputValue && pokemonData?.id) {
+            addItem(id, Number(inputValue), pokemonData.id); // ส่ง id และ inputValue พร้อม `pokemonData.id`
+            console.log(`Added: { name: ${id}, quantity: ${inputValue}, image: ${pokemonData.id} }`);
         }
-        setInputValue(value); // อัปเดตค่าของ input
     };
-
 
     useEffect(() => {
         // ตรวจสอบว่า 'name' ถูกกำหนดแล้ว
@@ -60,7 +71,6 @@ const PokemonPage = () => {
             fetchPokemonData();
         }
     }, [id]); // เมื่อ 'name' เปลี่ยนให้ดึงข้อมูลใหม่
-
     if (!pokemonData) {
         return <div
             className="min-h-screen flex  flex-col gap-4 items-center justify-center  rounded-md">
@@ -69,6 +79,7 @@ const PokemonPage = () => {
         </div>
     }
 
+    console.log(pokemonData.id)
 
     return (
         <div className="p-5 ">
@@ -88,9 +99,9 @@ const PokemonPage = () => {
                             onChange={(e) => setCount(Number(e.target.value))} // แก้ไขค่าเมื่อเลื่อนแถบ
                         />
                         <div className="flex justify-between   mt-2 text-xs bg-rose-500">
-                            <span onClick={() => handleClick(20)}></span>
-                            <span onClick={() => handleClick(20)}></span>
-                            <span onClick={() => handleClick(20)}></span>
+                            <span onClick={() => handleSwitchImage(20)}></span>
+                            <span onClick={() => handleSwitchImage(20)}></span>
+                            <span onClick={() => handleSwitchImage(20)}></span>
                         </div>
                     </div>
                 </div>
@@ -100,7 +111,7 @@ const PokemonPage = () => {
                         <Image
                             width={120}
                             height={120}
-                            src={getImage()} // ใช้ฟังก์ชันที่เลือกภาพ
+                            src={switchImage()} // ใช้ฟังก์ชันที่เลือกภาพ
                             alt={pokemonData.name}
                             loading="lazy"
                             blurDataURL={pokemonData.image} // ใช้ image URL
@@ -184,7 +195,7 @@ const PokemonPage = () => {
                                 <div className="mt-auot">
                                     <button
                                         disabled
-                                        className=" btn btn-active btn-accent btn-block hover:opacity-90">Subscribe
+                                        className=" btn btn-active btn-accent btn-block hover:opacity-90">Add Cart
                                     </button>
                                 </div>
                             </div>
@@ -268,7 +279,7 @@ const PokemonPage = () => {
                                         disabled
                                         className="btn btn-active btn-accent btn-block hover:opacity-90"
                                     >
-                                        Subscribe
+                                        Add Cart
                                     </button>
                                 </div>
                             </div>
@@ -345,10 +356,11 @@ const PokemonPage = () => {
                                 <div className="mt-auto">
                                     <div className="mt-auto">
                                         <button
+                                            onClick={handleAddCart}
                                             disabled={!inputValue}
                                             className="btn btn-active btn-accent btn-block hover:opacity-90"
                                         >
-                                            Subscribe
+                                            Add Cart
                                         </button>
                                     </div>
                                 </div>

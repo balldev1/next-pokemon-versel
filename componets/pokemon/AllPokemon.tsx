@@ -59,8 +59,6 @@ export const AllPokemon = () => {
         setFilteredPokemon(dataPokemon); // รีเซ็ตข้อมูลที่กรองให้กลับมาเป็นค่าเริ่มต้น
     };
 
-    console.log(filteredPokemon)
-
     return (
         <div className="container mx-auto">
             <div className="text-2xl flex gap-5 font-bold mb-4 ">

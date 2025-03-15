@@ -1,5 +1,6 @@
 'use client'
 import {useSession} from "next-auth/react";
+import {CartPokemon} from "@/componets/cart/CartPokemon";
 
 const CartPage = () => {
     const {data: session, status} = useSession();
@@ -11,18 +12,17 @@ const CartPage = () => {
     }
 
     return (
-        <div className="p-5">
-            <div className="container mx-auto p-5 rounded-md shadow-sm shadow-accent border-accent">
+        <div className="p-5 ">
+            <div className="container bg-gray-100 text-gray-950 mx-auto p-5 rounded-md shadow-sm shadow-accent border-accent">
                 <h1>CartPage</h1>
-                {session ? (
+                {session && (
                     <div>
                         <h2>Welcome, {session.user?.name || "User"}!</h2>
                         <p>Email: {session.user?.email}</p>
                         <pre>{JSON.stringify(session, null, 2)}</pre>
                     </div>
-                ) : (
-                    <p>Please log in to view your cart.</p>
                 )}
+                <CartPokemon/>
             </div>
         </div>
     );

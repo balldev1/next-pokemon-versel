@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 
 export const ButtonTheme = () => {
 
+    // เช็ค localStorag.getIteme ว่า มี value ไหม ถ้าไม่มีให้ เป็นค่าเริ่มต้น garden
+    // document.documentElement.setAttribute
     const [theme, setTheme] = useState<string | null>(null); // เริ่มต้นเป็น null เพื่อหลีกเลี่ยง hydration error
 
     useEffect(() => {
@@ -12,6 +14,8 @@ export const ButtonTheme = () => {
         document.documentElement.setAttribute("data-theme", savedTheme);
     }, []);
 
+    // มือคลิก toggle ให้ localStorage.setItem (newtheme)
+    // document.documentElement.setAttribute
     const toggleTheme = () => {
         if (!theme) return; // ป้องกันการสลับธีมถ้ายังไม่ได้โหลดค่า
 
