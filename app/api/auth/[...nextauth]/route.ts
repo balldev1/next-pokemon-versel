@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 
 const authOptions: NextAuthOptions = {
     providers: [
-        // credential คือกำหนด ฟิลด์ ให้ผู้ใช้กรอก
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
@@ -16,7 +15,6 @@ const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                // ตรวจสอบว่าcredentialsผู้ใช้กรอกมามีอยู่และรหัสผ่านถูกต้องหรือไม่
                 if (!credentials) return null;
                 const user: any = await prisma.users.findUnique({
                     where: { email: credentials.email },
@@ -24,30 +22,34 @@ const authOptions: NextAuthOptions = {
 
                 if (user && await bcrypt.compare(credentials.password, user.password)) {
                     return {
-                        // ข้อมูลใน mongodb ที่จะส่งไปเก็บไว้ที่ jwt
                         id: user.id,
                         email: user.email,
                     };
                 } else {
-                    // หากข้อมูลไม่ถูกต้องส่ง error กลับไป
                     throw new Error('Unauthorized');
                 }
             },
         }),
     ],
     adapter: PrismaAdapter(prisma),
-    // expire
     session: {
         strategy: 'jwt',
-        maxAge: 24 * 60 * 60, // 1 วัน (24 ชั่วโมง) ในหน่วยวินาที
+        maxAge: 24 * 60 * 60,
+        cookies: {
+            sessionToken: {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
+                sameSite: 'Strict',
+                path: '/',
+            },
+        },
     },
     jwt: {
-        maxAge: 24 * 60 * 60, // 1 วัน (24 ชั่วโมง) ในหน่วยวินาที
+        maxAge: 24 * 60 * 60,
     },
-    // ดึงข้อมูล user จากฐานข้อมูล ค่าไว้ที่ cookie next-auth.session-token
     callbacks: {
         async jwt({ token, user }: { token: any; user?: any }) {
-            if (user ) {
+            if (user) {
                 token.id = user.id;
                 token.email = user.email;
             }
@@ -59,13 +61,9 @@ const authOptions: NextAuthOptions = {
                 session.user.email = token.email;
             }
             return session;
-        } ,
+        },
     } as any,
 };
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST } ;
 
 // //prisma
 // import NextAuth, { NextAuthOptions } from 'next-auth';
