@@ -27,6 +27,7 @@ export const AuthCard = () => {
             handleSubmit(e); // เรียกใช้ handleSubmit เมื่อกด Enter
         }
     };
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         setError('');
@@ -54,7 +55,7 @@ export const AuthCard = () => {
                 console.log(email,password)
 
                 // ถ้าเป็นการ Register
-                const registerResponse = await fetch('http://localhost:3000/api/auth/register', {
+                const registerResponse = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
