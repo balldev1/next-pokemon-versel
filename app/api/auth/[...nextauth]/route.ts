@@ -1,4 +1,5 @@
-//prisma
+
+// //prisma
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaClient } from '@prisma/client';
@@ -7,7 +8,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 const prisma = new PrismaClient();
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
     providers: [
         // credential คือกำหนด ฟิลด์ ให้ผู้ใช้กรอก
         CredentialsProvider({
@@ -47,26 +48,26 @@ export const authOptions: NextAuthOptions = {
     },
     // ดึงข้อมูล user จากฐานข้อมูล ค่าไว้ที่ cookie next-auth.session-token
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user }: { token: any; user?: any }) {
             if (user ) {
                 token.id = user.id;
                 token.email = user.email;
             }
             return token;
         },
-        async session({ session, token }) {
+        async session({ session, token }: { session: any; token: any }) {
             if (session.user) {
                 session.user.id = token.id;
                 session.user.email = token.email;
             }
             return session;
-        },
-    }as any,
+        } ,
+    } as any,
 };
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST } ;
 
 // mongose
 // import NextAuth, { NextAuthOptions } from 'next-auth';

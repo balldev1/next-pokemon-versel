@@ -1,5 +1,5 @@
 'use client'
-import {AuthCard} from "@/componets/login/AuthCard";
+import {AuthCard} from "@/components/login/AuthCard";
 import { useSession } from "next-auth/react";
 import {useEffect} from "react";
 import {useRouter} from "next/navigation";

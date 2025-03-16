@@ -1,6 +1,6 @@
 'use client'
 
-import { AllPokemon } from "@/componets/pokemon/AllPokemon";
+import { AllPokemon } from "@/components/pokemon/AllPokemon";
 
 export default function Home() {
 

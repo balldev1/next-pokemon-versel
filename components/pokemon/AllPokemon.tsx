@@ -2,12 +2,24 @@ import {useEffect, useState} from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+interface PokemonData {
+    id : any,
+    name: any,
+    image: any,
+    sprites: {
+        front_default: any;
+        back_default: any;
+        front_shiny: any;
+        back_shiny: any;
+    };
+}
+
 export const AllPokemon = () => {
 
     const [isLoading, setIsLoading] = useState(false);
-    const [dataPokemon, setDataPokemon] = useState([]);
+    const [dataPokemon, setDataPokemon] = useState<PokemonData | any>([]);
     const [searchTerm, setSearchTerm] = useState(""); // 🆕 คำค้นหา
-    const [filteredPokemon, setFilteredPokemon] = useState([]); // 🆕 ข้อมูลที่ถูกกรอง
+    const [filteredPokemon, setFilteredPokemon] = useState<PokemonData[]>([]);
     const [page, setPage] = useState(1);
     const limit = 8;
 
@@ -20,13 +32,13 @@ export const AllPokemon = () => {
                 let data = await response.json();
 
                 let detailedData = await Promise.all(
-                    data.results.map(async (pokemon) => {
+                    data.results.map(async (pokemon: any) => {
                         let res = await fetch(pokemon.url);
                         let details = await res.json();
                         return {
                             name: details.name,
                             image: details.sprites.front_default,
-                            type: details.types.map((t) => t.type.name).join(", "),
+                            type: details.types.map((t: any) => t.type.name).join(", "),
                             height: details.height,
                             weight: details.weight,
                         };
@@ -48,7 +60,7 @@ export const AllPokemon = () => {
 
     // 🆕 ฟังก์ชันค้นหาข้อมูลเมื่อกดปุ่ม
     const handleSearch = () => {
-        const result = dataPokemon.filter((pokemon) =>
+        const result = dataPokemon.filter((pokemon: any) =>
             pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredPokemon(result);

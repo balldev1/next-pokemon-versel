@@ -1,23 +1,35 @@
-import { connectDB } from "@/utils/db";
-import User from "@/models/User";
-import bcrypt from "bcryptjs";
+// app/api/auth/register/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcrypt';
+import { PrismaClient } from '@prisma/client';
 
-export async function POST(req) {
-    await connectDB();
+const prisma = new PrismaClient();
 
-    const { username, password } = await req.json();
+export async function POST(req: NextRequest) {
+    const { email, password } = await req.json();
 
-    if (!username || !password) {
-        return new Response(JSON.stringify({ message: "All fields required" }), { status: 400 });
-    }
+    // ตรวจสอบว่า email
+    const existingUser = await prisma.users.findUnique({ where: { email } });
 
-    const existingUser = await User.findOne({ username });
     if (existingUser) {
-        return new Response(JSON.stringify({ message: "User already exists" }), { status: 400 });
+        return NextResponse.json({ error: 'User already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ username, password: hashedPassword });
+    // ตรวจสอบว่า username หรือ email ไม่เป็น null
+    if (!email) {
+        return NextResponse.json({ error: ' and email are required' });
+    }
 
-    return new Response(JSON.stringify({ message: "User registered successfully" }), { status: 201 });
+    // แฮชรหัสผ่าน
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // สร้างผู้ใช้ใหม่
+    const user = await prisma.users.create({
+        data: {
+            email,
+            password: hashedPassword,
+        },
+    });
+
+    return NextResponse.json({ message: 'User registered successfully', user });
 }

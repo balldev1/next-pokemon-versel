@@ -1,6 +1,6 @@
 'use client'
 import {useSession} from "next-auth/react";
-import {CartPokemon} from "@/componets/cart/CartPokemon";
+import {CartPokemon} from "@/components/cart/CartPokemon";
 
 const CartPage = () => {
     const {data: session, status} = useSession();

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ButtonTheme } from "@/componets/button/ButtonTheme";
-import { NavbarRoute } from "@/componets/layout/NavbarRoute";
+import { ButtonTheme } from "@/components/button/ButtonTheme";
+import { NavbarRoute } from "@/components/layout/NavbarRoute";
 import { SessionProvider } from "next-auth/react";  // นำเข้า SessionProvider
-import ClientLayout from "@/componets/ClientLayout";  // นำเข้า ClientLayout
+import ClientLayout from "@/components/ClientLayout";  // นำเข้า ClientLayout
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

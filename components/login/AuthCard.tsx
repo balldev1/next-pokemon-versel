@@ -27,30 +27,51 @@ export const AuthCard = () => {
             handleSubmit(e); // เรียกใช้ handleSubmit เมื่อกด Enter
         }
     };
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setError("");
-        setSuccess("");
+        setError('');
+        setSuccess('');
         setLoading(true);
 
         try {
             loginSchema.parse({ email, password });
 
-            const nextAuthResponse: any = await signIn("credentials", {
-                redirect: false,
-                email,
-                password,
-            });
-            console.log(email)
+            if (isLogin) {
+                // ถ้าเป็นการ login
+                const nextAuthResponse: any = await signIn('credentials', {
+                    redirect: false,
+                    email,
+                    password,
+                });
 
-            if (nextAuthResponse?.error) {
-                setError(nextAuthResponse.error);
+                if (nextAuthResponse?.error) {
+                    setError(nextAuthResponse.error);
+                } else {
+                    setSuccess('Login successful!');
+                    router.push('/');
+                }
             } else {
-                setSuccess("Login successful!");
-                // ✅ Redirect ไป "/dashboard" หลังจาก Login สำเร็จ
-                router.push("/");
+                console.log(email,password)
+
+                // ถ้าเป็นการ Register
+                const registerResponse = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+
+                const result = await registerResponse.json();
+                if (registerResponse.ok) {
+                    setSuccess('Registration successful!');
+                    router.push('/login'); // หรือหน้าอื่นที่ต้องการ
+                } else {
+                    setError(result?.error || 'An error occurred during registration.');
+                }
             }
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message);
         } finally {
             setLoading(false);

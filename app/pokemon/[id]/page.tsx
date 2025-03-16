@@ -2,14 +2,26 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from "next/image";
-import {Countdown} from "@/componets/pokemon/Countdown";
+import {Countdown} from "@/components/pokemon/Countdown";
 import {useCartStore} from "@/stores/useStore";
 import Swal from "sweetalert2";
+
+interface PokemonData {
+    id : any,
+    name: any,
+    image: any,
+    sprites: {
+        front_default: any;
+        back_default: any;
+        front_shiny: any;
+        back_shiny: any;
+    };
+}
 
 const PokemonPage = () => {
 
     const { id } = useParams<{ id: string }>();
-    const [pokemonData, setPokemonData] = useState(null);
+    const [pokemonData, setPokemonData] = useState<PokemonData | null>(null);
     // สร้าง state สำหรับเก็บค่าของ input
     const [inputValue, setInputValue] = useState('');
     const [count, setCount] = useState(0); // สถานะสำหรับค่า range
@@ -20,7 +32,7 @@ const PokemonPage = () => {
 
     // ฟังก์ชันที่ใช้ในการตรวจสอบและอัปเดตค่าใน input
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+        const value: any = e.target.value;
         if (value < 0) {
             e.target.value = 0 as any; // ถ้าค่าติดลบให้ปรับเป็น 0
         }
@@ -36,15 +48,15 @@ const PokemonPage = () => {
     const switchImage = () => {
         switch (count) {
             case 0:
-                return pokemonData.sprites.front_default;
+                return pokemonData?.sprites.front_default;
             case 20:
-                return pokemonData.sprites.back_default;
+                return pokemonData?.sprites.back_default;
             case 40:
-                return pokemonData.sprites.front_shiny;
+                return pokemonData?.sprites.front_shiny;
             case 60:
-                return pokemonData.sprites.back_shiny;
+                return pokemonData?.sprites.back_shiny;
             default:
-                return pokemonData.sprites.front_default;
+                return pokemonData?.sprites.front_default;
         }
     };
 
