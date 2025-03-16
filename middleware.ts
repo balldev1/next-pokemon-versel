@@ -1,6 +1,5 @@
 // middleware.ts
 import { withAuth } from 'next-auth/middleware';
-import { useSession } from "next-auth/react";
 
 export default withAuth({
 

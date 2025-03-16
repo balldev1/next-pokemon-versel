@@ -23,6 +23,13 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",  // สำหรับไฟล์ next-env.d.ts ที่จำเป็นสำหรับ Next.js
+    "**/*.ts",        // รวมไฟล์ .ts
+    "**/*.tsx",       // รวมไฟล์ .tsx
+    ".next/types/**/*.ts"  // รวมไฟล์ types ของ Next.js
+  ],
+  "exclude": [
+    "node_modules"    // ยกเว้น node_modules
+  ]
 }
