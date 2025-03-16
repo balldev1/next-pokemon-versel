@@ -61,7 +61,7 @@ const authOptions: NextAuthOptions = {
             name: `__Host-next-auth.csrf-token`,
             options: {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
+                secure: process.env.NEXTAUTH_SECRET === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
                 sameSite: 'Strict',
                 path: '/',
             },
@@ -70,7 +70,7 @@ const authOptions: NextAuthOptions = {
             name: `__Secure-next-auth.callback-url`,
             options: {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
+                secure: process.env.NEXTAUTH_SECRET === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
                 sameSite: 'Strict',
                 path: '/',
             },
@@ -79,7 +79,7 @@ const authOptions: NextAuthOptions = {
             name: `__Secure-next-auth.session-token`,
             options: {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
+                secure: process.env.NEXTAUTH_SECRET === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
                 sameSite: 'Strict',
                 path: '/',
             },
