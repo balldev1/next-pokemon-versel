@@ -14,15 +14,14 @@ const CartPage = () => {
     return (
         <div className="p-5 ">
             <div className="container bg-gray-100 text-gray-950 mx-auto p-5 rounded-md shadow-sm shadow-accent border-accent">
-                <h1>CartPage</h1>
-                {session && (
-                    <div>
-                        <h2>Welcome, {session.user?.name || "User"}!</h2>
-                        <p>Email: {session.user?.email}</p>
-                        <pre>{JSON.stringify(session, null, 2)}</pre>
-                    </div>
-                )}
                 <CartPokemon/>
+                {/*{session && (*/}
+                {/*    <div>*/}
+                {/*        <h2>Welcome, {session.user?.name || "User"}!</h2>*/}
+                {/*        <p>Email: {session.user?.email}</p>*/}
+                {/*        <pre>{JSON.stringify(session, null, 2)}</pre>*/}
+                {/*    </div>*/}
+                {/*)}*/}
             </div>
         </div>
     );

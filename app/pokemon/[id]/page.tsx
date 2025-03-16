@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import Image from "next/image";
 import {Countdown} from "@/componets/pokemon/Countdown";
 import {useCartStore} from "@/stores/useStore";
+import Swal from "sweetalert2";
 
 const PokemonPage = () => {
 
@@ -50,7 +51,17 @@ const PokemonPage = () => {
     // ฟังก์ชันเพิ่มข้อมูลลงในตะกร้า
     const handleAddCart = () => {
         if (id && inputValue && pokemonData?.id) {
-            addItem(id, Number(inputValue), pokemonData.id); // ส่ง id และ inputValue พร้อม `pokemonData.id`
+            addItem(id, Number(inputValue), pokemonData.id);
+
+            // แสดง Swal แจ้งเตือนเมื่อเพิ่มสินค้าเรียบร้อยแล้ว
+            Swal.fire({
+                title: "เพิ่มสำเร็จ! 🎉",
+                text: `คุณได้เพิ่ม ${id} จำนวน ${inputValue} ตัวลงในตะกร้า`,
+                icon: "success",
+                timer: 2000, // Alert จะหายไปอัตโนมัติใน 2 วินาที
+                showConfirmButton: false
+            });
+
             console.log(`Added: { name: ${id}, quantity: ${inputValue}, image: ${pokemonData.id} }`);
         }
     };
@@ -284,8 +295,8 @@ const PokemonPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="card  bg-base-100 shadow-sm shadow-accent hover:bg-accent/10">
-                            <div className="card-body flex ">
+                        <div className="card bg-base-100 shadow-sm shadow-accent hover:bg-accent/10">
+                            <div className="card-body flex">
                                 <span className="badge badge-xs badge-warning">Most Popular</span>
                                 <div className="flex justify-between">
                                     <h2 className="text-3xl font-bold">Premium</h2>
@@ -295,9 +306,14 @@ const PokemonPage = () => {
                                         className="input input-sm w-24"
                                         value={inputValue} // ให้ค่าของ input มาจาก state
                                         onChange={handleInputChange} // ใช้ onChange เพื่ออัปเดตค่า
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter" && inputValue) {
+                                                handleAddCart(); // เมื่อกด Enter ขณะกรอกค่าใน input
+                                            }
+                                        }}
                                     />
                                 </div>
-                                <ul className="mt-6 flex flex-col gap-2 text-xs  ">
+                                <ul className="mt-6 flex flex-col gap-2 text-xs">
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              className="size-4 me-2 inline-block text-success" fill="none"
@@ -319,7 +335,7 @@ const PokemonPage = () => {
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              className="size-4 me-2 inline-block text-success" fill="none"
-                                             viewBox="0 0 24 24" stroke="currentColor">
+                                             viewBox="http://www.w3.org/2000/svg" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                   d="M5 13l4 4L19 7"/>
                                         </svg>
@@ -328,7 +344,7 @@ const PokemonPage = () => {
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              className="size-4 me-2 inline-block text-success" fill="none"
-                                             viewBox="0 0 24 24" stroke="currentColor">
+                                             viewBox="http://www.w3.org/2000/svg" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                   d="M5 13l4 4L19 7"/>
                                         </svg>
@@ -337,18 +353,15 @@ const PokemonPage = () => {
                                     <li className="opacity-50">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              className="size-4 me-2 inline-block text-base-content/50" fill="none"
-                                             viewBox="0 0 24 24" stroke="currentColor">
+                                             viewBox="http://www.w3.org/2000/svg" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                   d="M5 13l4 4L19 7"/>
                                         </svg>
                                         <span className="line-through">Seamless cloud integration</span>
                                     </li>
                                     <li className="opacity-50">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             className="size-4 me-2 inline-block text-base-content/50" fill="none"
-                                             viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                                  d="M5 13l4 4L19 7"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="http://www.w3.org/2000/svg" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
                                         </svg>
                                         <span className="line-through">Real-time collaboration tools</span>
                                     </li>

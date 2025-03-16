@@ -10,6 +10,7 @@ interface CartItem {
 interface StoreState {
     items: CartItem[];
     addItem: (name: string, quantity: number, pokemonId: number) => void;
+    updateQuantity: (name: string, quantity: number) => void; // ฟังก์ชันใหม่
     removeItem: (name: string) => void;
     clearCart: () => void;
 }
@@ -39,14 +40,21 @@ export const useCartStore = create<StoreState>()(
                     }
                 });
             },
-
-            removeItem: (name) => {
+            updateQuantity: (name, quantity) => {
                 set((state) => ({
-                    items: state.items.filter((item) => item.name !== name),
+                    items: state.items.map(item =>
+                        item.name === name ? { ...item, quantity } : item
+                    ),
                 }));
             },
-
-            clearCart: () => set({ items: [] }),
+            removeItem: (name) => {
+                set((state) => ({
+                    items: state.items.filter(item => item.name !== name),
+                }));
+            },
+            clearCart: () => {
+                set({ items: [] });
+            },
         }),
         {
             name: "cart-storage", // key ที่ใช้ใน LocalStorage
