@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 
 const authOptions: NextAuthOptions = {
     providers: [
+        // credential คือกำหนด ฟิลด์ ให้ผู้ใช้กรอก
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
@@ -15,6 +16,7 @@ const authOptions: NextAuthOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
+                // ตรวจสอบว่า credentials ผู้ใช้กรอกมามีอยู่และรหัสผ่านถูกต้องหรือไม่
                 if (!credentials) return null;
                 const user: any = await prisma.users.findUnique({
                     where: { email: credentials.email },
@@ -22,10 +24,12 @@ const authOptions: NextAuthOptions = {
 
                 if (user && await bcrypt.compare(credentials.password, user.password)) {
                     return {
+                        // ข้อมูลใน mongodb ที่จะส่งไปเก็บไว้ที่ jwt
                         id: user.id,
                         email: user.email,
                     };
                 } else {
+                    // หากข้อมูลไม่ถูกต้องส่ง error กลับไป
                     throw new Error('Unauthorized');
                 }
             },
@@ -34,18 +38,11 @@ const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     session: {
         strategy: 'jwt',
-        maxAge: 24 * 60 * 60,
-        cookies: {
-            sessionToken: {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // ใช้ secure cookies เฉพาะในโปรดักชัน
-                sameSite: 'Strict',
-                path: '/',
-            },
-        },
+        maxAge: 24 * 60 * 60, // 1 วัน (24 ชั่วโมง) ในหน่วยวินาที
     },
     jwt: {
-        maxAge: 24 * 60 * 60,
+        maxAge: 24 * 60 * 60, // 1 วัน (24 ชั่วโมง) ในหน่วยวินาที
+        secret: process.env.NEXTAUTH_JWT_SECRET, // กำหนด secret สำหรับ JWT
     },
     callbacks: {
         async jwt({ token, user }: { token: any; user?: any }) {
@@ -62,8 +59,18 @@ const authOptions: NextAuthOptions = {
             }
             return session;
         },
-    } as any,
+    },
+    pages: {
+        signIn: '/login', // หน้า login ที่จะไปถ้าไม่มี session
+    },
+    debug: process.env.NODE_ENV === 'development', // เปิด debug ใน development
+    secret: process.env.NEXTAUTH_SECRET, // กำหนด secret สำหรับการเข้ารหัส session
 };
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
+
 
 // //prisma
 // import NextAuth, { NextAuthOptions } from 'next-auth';
